@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news_api_sample/Controller/news_screen_controller.dart';
+
+import 'package:news_api_sample/View/News%20Screen/Widgets/news_card.dart';
 import 'package:news_api_sample/View/Read%20News%20Screen/read_news_screen.dart';
 import 'package:news_api_sample/View/Saved%20Articles/saved_articles.dart';
 import 'package:news_api_sample/View/Search%20Screen/search_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -135,53 +136,9 @@ class NewsScreenContent extends StatelessWidget {
                                           content: newsItem.content,
                                           publishedAt: newsItem.publishedAt,
                                           author: newsItem.author,
-                                          
                                         )));
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(width: 1),
-                                borderRadius: BorderRadius.circular(12)),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 25),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  newsItem.title ?? 'No Title',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                if (newsItem.urlToImage != null)
-                                  SizedBox(
-                                    height: 200,
-                                    width: 345,
-                                    child: Image.network(
-                                      newsItem.urlToImage!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Text("Author:"),
-                                    Text(newsItem.author ?? "not specified"),
-                                    Text("Published At"),
-                                  ],
-                                ),
-                                if (newsItem.publishedAt != null)
-                                  Text(
-                                    DateFormat('dd MMM yyyy, hh:mm a')
-                                        .format(newsItem.publishedAt!),
-                                    style: const TextStyle(
-                                        fontSize: 14, color: Colors.grey),
-                                  ),
-                              ],
-                            ),
+                          child: NewsCard(publishedAt: newsItem.publishedAt, author: newsItem.author,title: newsItem.title,imgurl: newsItem.urlToImage,
                           ),
                         ),
                       );
