@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:news_api_sample/Controller/news_screen_controller.dart';
+import 'package:news_api_sample/View/Read%20News%20Screen/read_news_screen.dart';
 import 'package:news_api_sample/View/Saved%20Articles/saved_articles.dart';
 import 'package:news_api_sample/View/Search%20Screen/search_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -12,10 +14,8 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
- 
-
   final List<Widget> screens = [
-    NewsScreenContent(), 
+    NewsScreenContent(),
     SearchScreen(),
     SavedArticles(),
   ];
@@ -24,20 +24,22 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   void initState() {
-  super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<NewsScreenController>().onCategorySelection(0); // Select 'All'
-  });
-}
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      context
+          .read<NewsScreenController>()
+          .onCategorySelection(0); // Select 'All'
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text("NewsApp"),
       ),
       backgroundColor: Colors.white,
-      body: screens[selectedTabIndex], // Dynamically update the body
+      body: screens[selectedTabIndex], //change the bdy
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
           setState(() {
@@ -60,9 +62,9 @@ class _NewsScreenState extends State<NewsScreen> {
             label: "Search",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.exit_to_app_outlined),
-            activeIcon: Icon(Icons.exit_to_app),
-            label: "Logout",
+            icon: Icon(Icons.bookmark_border_outlined),
+            activeIcon: Icon(Icons.bookmark),
+            label: "Saved",
           ),
         ],
       ),
@@ -70,12 +72,9 @@ class _NewsScreenState extends State<NewsScreen> {
   }
 }
 
-// Refactor the main news content to a separate widget
 class NewsScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  
-
     return Consumer<NewsScreenController>(
       builder: (context, NewsScreenControlerobj, child) => Column(
         children: [
@@ -123,32 +122,67 @@ class NewsScreenContent extends StatelessWidget {
                 : ListView.separated(
                     itemBuilder: (context, index) {
                       final newsItem = NewsScreenControlerobj.newsList[index];
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 25),
-                        color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              newsItem.title ?? 'No Title',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            if (newsItem.urlToImage != null)
-                              SizedBox(
-                                height: 200,
-                                width: 300,
-                                child: Image.network(
-                                  newsItem.urlToImage!,
-                                  fit: BoxFit.cover,
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ReadNewsScreen(
+                                          title: newsItem.title,
+                                          ImgUrl: newsItem.urlToImage,
+                                          content: newsItem.content,
+                                          publishedAt: newsItem.publishedAt,
+                                          author: newsItem.author,
+                                          
+                                        )));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(width: 1),
+                                borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  newsItem.title ?? 'No Title',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            const SizedBox(height: 10),
-                          ],
+                                const SizedBox(height: 10),
+                                if (newsItem.urlToImage != null)
+                                  SizedBox(
+                                    height: 200,
+                                    width: 345,
+                                    child: Image.network(
+                                      newsItem.urlToImage!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Text("Author:"),
+                                    Text(newsItem.author ?? "not specified"),
+                                    Text("Published At"),
+                                  ],
+                                ),
+                                if (newsItem.publishedAt != null)
+                                  Text(
+                                    DateFormat('dd MMM yyyy, hh:mm a')
+                                        .format(newsItem.publishedAt!),
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.grey),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     },
