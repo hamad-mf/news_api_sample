@@ -47,7 +47,7 @@ class NewsScreenController with ChangeNotifier {
     _setLoadingState(false);
   }
 
-  // Handle category selection
+
   void onCategorySelection(int index) {
     selectedCategoryIndex = index;
     notifyListeners();
@@ -56,14 +56,14 @@ class NewsScreenController with ChangeNotifier {
     getArticles(category);
   }
 
-  // Search articles by keyword
+  
   Future<void> SearchNews({required String SearchKey}) async {
-    print("Search initiated with keyword: $SearchKey");
+    
     final searchUrl = Uri.parse(
         "https://newsapi.org/v2/everything?q=$SearchKey&apiKey=48264279477343ca81a8cbb122807810");
 
     _setLoadingState(true);
-    searchList = []; // Clear previous search results
+    searchList = []; 
     notifyListeners();
 
     try {
@@ -76,16 +76,16 @@ class NewsScreenController with ChangeNotifier {
         _handleApiError(response.statusCode);
       }
     } catch (e) {
-      print("Error during search: $e");
+      print(e);
       searchList = [];
     }
     _setLoadingState(false);
   }
 
-  // Handle sharing of articles
+ 
   Future<void> ShareArticle(String? ArticleUrl) async {
     if (ArticleUrl == null || ArticleUrl.isEmpty) {
-      print("Invalid article URL for sharing.");
+      print("mo url found");
       return;
     }
     try {
@@ -94,26 +94,26 @@ class NewsScreenController with ChangeNotifier {
         print("Article shared successfully!");
       }
     } catch (e) {
-      print("Error sharing article: $e");
+      print( "$e");
     }
   }
 
-  // Reset search state
+ 
   void clicksearch() {
     issearckclicked = false;
     searchList = [];
     notifyListeners();
   }
 
-  // Helper to set loading state
+
   void _setLoadingState(bool state) {
     isLoading = state;
     notifyListeners();
   }
 
-  // Handle API errors
+ 
   void _handleApiError(int statusCode) {
-    print("API Error: Status Code $statusCode");
+    print(" $statusCode");
     newsList = [];
     searchList = [];
   }

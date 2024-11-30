@@ -7,11 +7,11 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class ReadNewsScreen extends StatefulWidget {
   String? title;
-  String? ImgUrl;
+  String? ImgUrl="";
   String? content;
   String? author;
   DateTime? publishedAt;
-  String? ArticleUrl;
+  String? ArticleUrl="";
   ReadNewsScreen(
       {super.key,
       this.content,
@@ -39,7 +39,7 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.title!,
+                    widget.title ?? 'No Title Available',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -48,20 +48,33 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
                   SizedBox(
                     height: 20,
                   ),
-                  if (widget.ImgUrl != null)
-                    SizedBox(
-                      height: 200,
-                      width: double.infinity,
-                      child: Image.network(
-                        widget.ImgUrl!,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                  widget.ImgUrl != null && widget.ImgUrl!.isNotEmpty
+                      ? SizedBox(
+                          height: 200,
+                          width: double.infinity,
+                          child: Image.network(
+                            widget.ImgUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : SizedBox(
+                          height: 200,
+                          width: double.infinity,
+                          child: Center(
+                            child: Text(
+                              'Image not available',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
                   SizedBox(
                     height: 20,
                   ),
                   Text(
-                    widget.content!,
+                    widget.content ?? 'Content not available',
                     style: TextStyle(color: Colors.black, fontSize: 17),
                   ),
                   SizedBox(
@@ -159,7 +172,7 @@ class _ReadNewsScreenState extends State<ReadNewsScreen> {
                   onPressed: () {
                     context
                         .read<NewsScreenController>()
-                        .ShareArticle(widget.ArticleUrl);
+                        .ShareArticle(widget.ArticleUrl ?? '');
                   }),
             ],
           ),

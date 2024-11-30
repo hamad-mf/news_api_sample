@@ -29,7 +29,7 @@ class _NewsScreenState extends State<NewsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       context
           .read<NewsScreenController>()
-          .onCategorySelection(0); // Select 'All'
+          .onCategorySelection(0); // Select 'All' categroy by default
     });
   }
 
@@ -136,6 +136,7 @@ class NewsScreenContent extends StatelessWidget {
                                           content: newsItem.content,
                                           publishedAt: newsItem.publishedAt,
                                           author: newsItem.author,
+                                          ArticleUrl: newsItem.url,
                                         )));
                           },
                           child: NewsCard(publishedAt: newsItem.publishedAt, author: newsItem.author,title: newsItem.title,imgurl: newsItem.urlToImage,
