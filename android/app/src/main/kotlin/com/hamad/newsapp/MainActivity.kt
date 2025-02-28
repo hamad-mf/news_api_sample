@@ -1,4 +1,4 @@
-package com.example.news_api_sample
+package com.hamad.newsapp
 
 import io.flutter.embedding.android.FlutterActivity
 
