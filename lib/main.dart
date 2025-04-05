@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:news_api_sample/Controller/jobs_screen_controller.dart';
 import 'package:news_api_sample/Controller/news_screen_controller.dart';
-
+import 'package:news_api_sample/View/Data%20Fetch/data_fetch_screen.dart';
 import 'package:news_api_sample/View/News%20Screen/news_screen.dart';
+
 import 'package:provider/provider.dart';
 
 void main(List<String> args) {
@@ -14,13 +16,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context)=> NewsScreenController(),)
-      ],
-      
-      child: MaterialApp(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => JobsScreenController(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => NewsScreenController(),
+          ),
+        ],
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: NewsScreen(),
-      ));
+          home: DataFetchScreen(),
+        ));
   }
 }
